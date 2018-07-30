@@ -326,10 +326,20 @@ export const asyncRouterMap = [
     component: Layout,
     children: [{ path: 'index', component: () => import('@/views/i18n-demo/index'), name: 'i18n', meta: { title: 'i18n', icon: 'international' }}]
   },
-    {
-        path: '/i18n',
-        component: Layout,
-        children: [{ path: 'index', component: () => import('@/views/i18n-demo/index'), name: 'i18n', meta: { title: 'i18n', icon: 'international' }}]
+  {
+    path: '/manager',
+    component: Layout,
+    redirect: '/manager/manger-list',
+    name: 'manager',
+    meta: {
+      title: '管理员',
+      icon: 'people'
     },
+    children: [
+      { path: 'manager-list', component: () => import('@/views/manager/managerList'), name: 'managerList', meta: { title: '管理员列表' }},
+      { path: 'manager-store', component: () => import('@/views/example/create'), name: 'managerStore', meta: { title: '添加管理员' }},
+      { path: 'manager-update', component: () => import('@/views/example/create'), name: 'managerUpdate', meta: { title: '编辑管理员' }}
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
