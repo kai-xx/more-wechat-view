@@ -2,38 +2,38 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/api/news/index',
+    url: '/api/wechat/index',
     method: 'get',
     params: query
   })
 }
 
-export function fetchNews(id) {
+export function fetchWechat(id) {
   return request({
-    url: '/api/news/show/' + id,
+    url: '/api/wechat/show/' + id,
     method: 'get'
   })
 }
 
-export function createNews(data) {
+export function createWechat(data) {
   return request({
-    url: '/api/news/store',
+    url: '/api/wechat/store',
     method: 'post',
     data
   })
 }
 
-export function updateNews(data) {
+export function updateWechat(data) {
   return request({
-    url: '/api/news/update/' + data.id,
+    url: '/api/wechat/update/' + data.id,
     method: 'put',
     data
   })
 }
 
-export function deleteNews(id) {
+export function deleteWechat(id) {
   return request({
-    url: '/api/news/delete/' + id,
+    url: '/api/wechat/delete/' + id,
     method: 'delete'
   })
 }

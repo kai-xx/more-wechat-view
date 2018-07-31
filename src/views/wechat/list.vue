@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="标题" v-model="listQuery.keyword">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.name')" v-model="listQuery.keyword">
       </el-input>
       <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" :placeholder="$t('table.status')">
         <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
@@ -9,7 +9,7 @@
       </el-select>
       <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <router-link :to="'/news/create/'">
+      <router-link :to="'/wechat/create/'">
         <el-button class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
       </router-link>
     </div>
@@ -48,7 +48,7 @@
 
       <el-table-column align="center" label="操作" width="230">
         <template slot-scope="scope">
-          <router-link :to="'/news/edit/'+scope.row.id">
+          <router-link :to="'/wechat/edit/'+scope.row.id">
             <el-button type="primary" size="small">编辑</el-button>
           </router-link>
           <el-button v-if="scope.row.deleted_at==null" size="mini" type="danger" @click="handleDelete(scope.row,'deleted')">删除
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { fetchList, deleteNews } from '@/api/news'
+import { fetchList, deleteWechat } from '@/api/wechat'
 const stateKeyValue = {
   1: '正常',
   2: '冻结'
@@ -125,7 +125,7 @@ export default {
       this.getList()
     },
     handleDelete(row) {
-      deleteNews(row.id).then(() => {
+      deleteWechat(row.id).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',
