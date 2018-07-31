@@ -2,39 +2,39 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/api/manager/index',
+    url: '/api/news/index',
     method: 'get',
     params: query
   })
 }
 
-export function fetchManager(id) {
+export function fetchNews(id) {
   return request({
-    url: '/api/manager/show',
+    url: '/api/news/show',
     method: 'get',
     params: { id }
   })
 }
 
-export function createManager(data) {
+export function createNews(data) {
   return request({
-    url: '/api/manager/store',
+    url: '/api/news/store',
     method: 'post',
     data
   })
 }
 
-export function updateManager(data) {
+export function updateNews(data) {
   return request({
-    url: '/api/manager/update/' + data.id,
+    url: '/api/news/update/' + data.id,
     method: 'put',
     data
   })
 }
 
-export function deleteManager(id) {
+export function deleteNews(id) {
   return request({
-    url: '/api/manager/delete/' + id,
+    url: '/api/news/delete/' + id,
     method: 'delete'
   })
 }

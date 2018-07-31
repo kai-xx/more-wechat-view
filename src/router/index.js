@@ -330,15 +330,20 @@ export const asyncRouterMap = [
     path: '/manager',
     component: Layout,
     redirect: '/manager/manger-list',
-    name: 'manager',
-    meta: {
-      title: '管理员',
-      icon: 'people'
-    },
+    alwaysShow: true,
+    meta: { title: '管理员', icon: 'people' },
+    children: [{ path: 'manger-list', component: () => import('@/views/manager/managerList'), name: 'mangerList', meta: { title: '管理员列表' }}]
+  },
+  {
+    path: '/news',
+    component: Layout,
+    redirect: '/news/news-list',
+    alwaysShow: true,
+    meta: { title: '图文', icon: 'excel' },
     children: [
-      { path: 'manager-list', component: () => import('@/views/manager/managerList'), name: 'managerList', meta: { title: '管理员列表' }},
-      { path: 'manager-store', component: () => import('@/views/example/create'), name: 'managerStore', meta: { title: '添加管理员' }},
-      { path: 'manager-update', component: () => import('@/views/example/create'), name: 'managerUpdate', meta: { title: '编辑管理员' }}
+      { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '图文列表' }},
+      { path: 'news-create', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建图文' }, hidden: true },
+      { path: 'news-edit', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑图文' }, hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

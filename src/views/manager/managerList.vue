@@ -67,6 +67,11 @@
         </el-form-item>
         <el-form-item :label="$t('table.login_name')" prop="login_name">
           <el-input v-model="temp.login_name" placeholder="登录名"></el-input>
+          <el-alert
+                    title="登录名为长度为6-16的数字和字母组成"
+                    type="warning"
+                    :closable="false">
+          </el-alert>
         </el-form-item>
         <el-form-item :label="$t('table.name')" prop="name">
           <el-input v-model="temp.name" placeholder="姓名"></el-input>
@@ -109,7 +114,7 @@
 </template>
 
 <script>
-import { fetchList, createManager, updateManager } from '@/api/manager'
+import { fetchList, createManager, updateManager, deleteManager } from '@/api/manager'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -168,8 +173,7 @@ export default {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+      }
     }
   },
   filters: {
@@ -226,7 +230,6 @@ export default {
       }
     },
     handleCreate() {
-      console.log(managerTypeOptions)
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
@@ -237,8 +240,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createManager(this.temp).then(() => {
-            this.list.unshift(this.temp)
+          createManager(this.temp).then((response) => {
+            this.list.unshift(response.data.data)
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -284,14 +287,16 @@ export default {
       })
     },
     handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+      deleteManager(row.id).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        const index = this.list.indexOf(row)
+        this.list.splice(index, 1)
       })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
