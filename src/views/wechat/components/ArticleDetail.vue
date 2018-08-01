@@ -107,7 +107,6 @@ export default {
         ],
         app_id: [
           { required: true, message: '请输入app_id', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         app_secret: [
           { required: true, message: '请输入app_secret', trigger: 'blur' },
@@ -137,17 +136,18 @@ export default {
     fetchData(id) {
       fetchWechat(id).then(response => {
         this.postForm = response.data.data
-        console.log(this.postForm)
       }).catch(err => {
         console.log(err)
       })
     },
     submitForm() {
+      console.log(this.postForm)
       this.postForm.display_time = parseInt(this.display_time / 1000)
-      if (!this.isEdit) {
-        createWechat(this.postForm).then((response) => {
-          this.$refs.postForm.validate(valid => {
-            if (valid) {
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          if (!this.isEdit) {
+            createWechat(this.postForm).then((response) => {
+              console.log(valid)
               this.loading = true
               this.$notify({
                 title: '成功',
@@ -157,15 +157,10 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-            } else {
-              return false
-            }
-          })
-        })
-      } else {
-        updateWechat(this.postForm).then((response) => {
-          this.$refs.postForm.validate(valid => {
-            if (valid) {
+              this.$router.push('/wechat/wechat-list')
+            })
+          } else {
+            updateWechat(this.postForm).then((response) => {
               this.loading = true
               this.$notify({
                 title: '成功',
@@ -175,13 +170,13 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-            } else {
-              console.log('error submit!!')
-              return false
-            }
-          })
-        })
-      }
+              this.$router.push('/wechat/wechat-list')
+            })
+          }
+        } else {
+          return false
+        }
+      })
     }
   }
 }

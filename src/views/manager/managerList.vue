@@ -170,9 +170,13 @@ export default {
       },
       dialogPvVisible: false,
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        type: [{ required: true, message: '请选择用户身份', trigger: 'change' }],
+        login_name: [
+          { required: true, message: '请输入登录名', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在6-16个字符', trigger: 'blur' }
+        ],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
     }
   },

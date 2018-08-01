@@ -58,18 +58,6 @@ export const asyncRouterMap = [
     children: [{ path: 'manger-list', component: () => import('@/views/manager/managerList'), name: 'mangerList', meta: { title: '管理员列表' }}]
   },
   {
-    path: '/news',
-    component: Layout,
-    redirect: '/news/news-list',
-    alwaysShow: true,
-    meta: { title: '图文', icon: 'excel' },
-    children: [
-      { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '图文列表' }},
-      { path: 'create', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建图文' }, hidden: true },
-      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑图文' }, hidden: true }
-    ]
-  },
-  {
     path: '/wechat',
     component: Layout,
     redirect: '/wechat/wechat-list',
@@ -79,6 +67,18 @@ export const asyncRouterMap = [
       { path: 'wechat-list', component: () => import('@/views/wechat/list'), name: 'wechatList', meta: { title: '公众号列表' }},
       { path: 'create', component: () => import('@/views/wechat/create'), name: 'createWechat', meta: { title: '添加公众号' }, hidden: true },
       { path: 'edit/:id', component: () => import('@/views/wechat/edit'), name: 'editWechat', meta: { title: '编辑公众号' }, hidden: true }
+    ]
+  },
+  {
+    path: '/news',
+    component: Layout,
+    redirect: '/news/news-list',
+    alwaysShow: true,
+    meta: { title: '图文', icon: 'excel' },
+    children: [
+      { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '图文列表' }},
+      { path: 'create/:oa_wechat_id', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建图文' }, hidden: true },
+      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑图文' }, hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

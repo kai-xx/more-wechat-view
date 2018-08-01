@@ -38,7 +38,7 @@
 
 <script>
 import MDinput from '@/components/MDinput'
-import Upload from '@/components/Upload/singleImage3'
+import Upload from '@/components/Upload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { createNews, updateNews, fetchNews } from '@/api/news'
 
@@ -74,6 +74,7 @@ export default {
       }
     }
     return {
+      oa_wechat_id: undefined,
       postForm: Object.assign({}, defaultForm),
       loading: false,
       rules: {
@@ -88,12 +89,13 @@ export default {
     }
   },
   created() {
-    console.log(this.isEdit);
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
     } else {
       this.postForm = Object.assign({}, defaultForm)
+      this.oa_wechat_id = this.$route.params && this.$route.params.oa_wechat_id
+      this.postForm.oa_wechat_id = this.$route.params && this.$route.params.oa_wechat_id
     }
   },
   methods: {
@@ -107,10 +109,13 @@ export default {
     },
     submitForm() {
       this.postForm.display_time = parseInt(this.display_time / 1000)
-      if (!this.isEdit) {
-        createNews(this.postForm).then((response) => {
-          this.$refs.postForm.validate(valid => {
-            if (valid) {
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          if (!this.isEdit) {
+            if (this.oa_wechat_id === undefined || isNaN(this.oa_wechat_id)) {
+              return this.$message.error('请选择公众号')
+            }
+            createNews(this.postForm).then((response) => {
               this.loading = true
               this.$notify({
                 title: '成功',
@@ -120,15 +125,10 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-            } else {
-              return false
-            }
-          })
-        })
-      } else {
-        updateNews(this.postForm).then((response) => {
-          this.$refs.postForm.validate(valid => {
-            if (valid) {
+              this.$router.push('/news/news-list')
+            })
+          } else {
+            updateNews(this.postForm).then((response) => {
               this.loading = true
               this.$notify({
                 title: '成功',
@@ -138,13 +138,13 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-            } else {
-              console.log('error submit!!')
-              return false
-            }
-          })
-        })
-      }
+              this.$router.push('/news/news-list')
+            })
+          }
+        } else {
+          return false
+        }
+      })
     }
   }
 }

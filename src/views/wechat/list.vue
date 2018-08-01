@@ -20,16 +20,21 @@
       </el-table-column>
 
 
-      <el-table-column min-width="300px" label="标题">
+      <el-table-column min-width="300px" label="公众号名称">
         <template slot-scope="scope">
-          <router-link class="link-type" :to="'/news/edit/'+scope.row.id">
-            <span>{{ scope.row.title }}</span>
+          <router-link class="link-type" :to="'/wechat/edit/'+scope.row.id">
+            <span>{{ scope.row.name }}</span>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" label="图片">
+      <el-table-column min-width="150px" label="联系人">
         <template slot-scope="scope">
-            <img :src="scope.row.path">
+          <span>{{scope.row.linkman}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column min-width="150px" label="联系人电话">
+        <template slot-scope="scope">
+          <span>{{scope.row.phone}}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="100">
