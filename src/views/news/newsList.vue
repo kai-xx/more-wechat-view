@@ -3,14 +3,14 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="标题" v-model="listQuery.keyword">
       </el-input>
-      <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" :placeholder="$t('table.status')">
+      <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" placeholder="状态">
         <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
         </el-option>
       </el-select>
       <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <router-link :to="'/news/create/'">
-        <el-button class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
       </router-link>
     </div>
     <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
@@ -68,12 +68,16 @@
 
 <script>
 import { fetchList, deleteNews } from '@/api/news'
+import waves from '@/directive/waves' // 水波纹指令
 const stateKeyValue = {
   1: '正常',
   2: '冻结'
 }
 export default {
   name: 'newsList',
+  directives: {
+    waves
+  },
   data() {
     return {
       list: null,
