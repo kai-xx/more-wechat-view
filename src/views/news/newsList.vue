@@ -1,15 +1,7 @@
 <template>
   <el-container>
-    <el-aside width="200px" style="border: 1px solid #eee">
-      <div class="app-container" style="margin-top: 20px">
-        <el-table :data="wechatList" v-loading.body="wechatLoading" style="width: 200px">
-          <el-table-column style="color: #ecf5ff" min-width="200px" label="公众号列表">
-            <template slot-scope="scope">
-              <el-radio @change='handleFilter' v-model="listQuery.oa_wechat_id" :label="scope.row.id">{{ scope.row.name }}</el-radio>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+    <el-aside width="245px" style="border: 1px solid #eee">
+      <left-list @handleFilter="handleFilter" v-model="listQuery.oa_wechat_id"></left-list>
     </el-aside>
     <el-main style="border: 1px solid #eee">
       <div class="app-container">
@@ -83,8 +75,8 @@
 
 <script>
 import { fetchList, deleteNews } from '@/api/news'
-import { fetchList as fetchWechatList } from '@/api/wechat'
 import waves from '@/directive/waves'
+import LeftList from '../wechat/leftList'
 
 const stateKeyValue = {
   1: '正常',
@@ -92,19 +84,12 @@ const stateKeyValue = {
 }
 export default {
   name: 'newsList',
+  components: { LeftList },
   directives: {
     waves
   },
   data() {
     return {
-      wechatList: null,
-      wechatLoading: true,
-      wechatQuery: {
-        keyword: undefined,
-        state: 1,
-        offset: 0,
-        limit: 20
-      },
       list: null,
       total: 0,
       listLoading: true,
@@ -130,17 +115,9 @@ export default {
     }
   },
   created() {
-    this.getWechatList()
     this.getList()
   },
   methods: {
-    getWechatList() {
-      this.wechatLoading = true
-      fetchWechatList(this.wechatQuery).then(response => {
-        this.wechatList = response.data.data
-        this.wechatLoading = false
-      })
-    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
