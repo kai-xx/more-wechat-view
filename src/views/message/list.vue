@@ -14,7 +14,7 @@
           </el-select>
           <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
           <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button @click="jumpToCreate" class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
+          <el-button class="filter-item" @click="jumpToCreate" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
         </div>
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
           <el-table-column align="center" label="编号" width="80">
@@ -26,7 +26,7 @@
 
           <el-table-column min-width="300px" label="标题">
             <template slot-scope="scope">
-              <router-link class="link-type" :to="'/news/edit/'+scope.row.id">
+              <router-link class="link-type" :to="'/message/edit/'+scope.row.id">
                 <span>{{ scope.row.title }}</span>
               </router-link>
             </template>
@@ -51,7 +51,7 @@
 
           <el-table-column align="center" label="操作" width="230">
             <template slot-scope="scope">
-              <router-link :to="'/news/edit/'+scope.row.id">
+              <router-link :to="'/message/edit/'+scope.row.id">
                 <el-button type="primary" size="small">编辑</el-button>
               </router-link>
               <el-button v-if="scope.row.deleted_at==null" size="mini" type="danger" @click="handleDelete(scope.row,'deleted')">删除
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { fetchList, deleteNews } from '@/api/news'
+import { fetchList, deleteMessage } from '@/api/message'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
 
@@ -81,7 +81,7 @@ const stateKeyValue = {
   2: '冻结'
 }
 export default {
-  name: 'newsList',
+  name: 'messageList',
   components: { LeftList },
   directives: {
     waves
@@ -116,14 +116,11 @@ export default {
     this.getList()
   },
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
     jumpToCreate() {
       if (this.listQuery.oa_wechat_id === undefined) {
         return this.$message.error('请选择公众号')
       }
-      this.$router.push('/news/create/' + this.listQuery.oa_wechat_id)
+      this.$router.push('/message/create/' + this.listQuery.oa_wechat_id)
     },
     getList() {
       this.listLoading = true
@@ -146,7 +143,7 @@ export default {
       this.getList()
     },
     handleDelete(row) {
-      deleteNews(row.id).then(() => {
+      deleteMessage(row.id).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',
@@ -162,12 +159,4 @@ export default {
 </script>
 
 <style scoped>
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
 </style>

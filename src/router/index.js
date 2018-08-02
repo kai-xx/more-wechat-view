@@ -70,6 +70,18 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/message',
+    component: Layout,
+    redirect: '/message/message-list',
+    alwaysShow: true,
+    meta: { title: '消息', icon: 'message' },
+    children: [
+      { path: 'message-list', component: () => import('@/views/message/list'), name: 'messageList', meta: { title: '消息列表' }},
+      { path: 'create/:oa_wechat_id', component: () => import('@/views/message/create'), name: 'createMessage', meta: { title: '添加消息' }, hidden: true },
+      { path: 'edit/:id', component: () => import('@/views/message/edit'), name: 'editMessage', meta: { title: '编辑消息' }, hidden: true }
+    ]
+  },
+  {
     path: '/news',
     component: Layout,
     redirect: '/news/news-list',
