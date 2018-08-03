@@ -20,7 +20,7 @@
           </el-select>
         </el-form-item>
         <el-form-item v-if="postForm.type == 2" prop="send_at" label-width="100px" label="发送时间:" class="postInfo-container-item">
-          <el-date-picker v-model="postForm.send_at" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+          <el-date-picker v-model="postForm.send_at" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"> placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item style="margin-bottom: 40px;" label-width="100px" label="备注:">
@@ -36,17 +36,49 @@
           <el-button type="primary" @click="openDialog">点击添加消息</el-button>
         </el-form-item>
 
+
+        <el-table v-if="messageArray.length > 0" :data="messageArray" border fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="编号" width="80">
+            <template slot-scope="scope">
+              <span>{{scope.row.id}}</span>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column min-width="300px" label="标题">
+            <template slot-scope="scope">
+              <span>{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="150px" label="图片">
+            <template slot-scope="scope">
+              <img :src="scope.row.path+'?imageView2/1/w/50/h/50'">
+            </template>
+          </el-table-column>
+          <el-table-column width="180px" align="创建时间" label="创建时间">
+            <template slot-scope="scope">
+              <span>{{scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" label="操作" width="230">
+            <template slot-scope="scope">
+              <el-button v-if="scope.row.deleted_at==null" size="mini" type="danger" @click="handleDelete(scope.row,'deleted')">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </el-form>
 
 
-    <el-dialog width="90%" v-el-drag-dialog @dragDialog="handleDrag" title="消息列表" :visible.sync="dialogTableVisible">
+    <el-dialog width="90%" v-el-drag-dialog title="消息列表" :visible.sync="dialogTableVisible">
       <div class="app-container">
         <div class="filter-container">
           <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="搜索" v-model="drapList.listQuery.keyword">
           </el-input>
           <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button class="filter-item" type="primary" v-waves icon="el-icon-edit" @click="handleDownload">保存</el-button>
+          <el-button class="filter-item" type="primary" v-waves icon="el-icon-edit" @click="handleSave">保存</el-button>
         </div>
         <!--<el-table :data="drapList.list" v-loading.body="drapList.listLoading" border fit highlight-current-row style="width: 100%">-->
         <el-table height="400" :data="drapList.list" v-loading.body="drapList.listLoading" border fit highlight-current-row @selection-change="handleSelectionChange"
@@ -61,9 +93,7 @@
 
           <el-table-column min-width="300px" label="标题">
             <template slot-scope="scope">
-              <router-link class="link-type" :to="'/message/edit/'+scope.row.id">
-                <span>{{ scope.row.title }}</span>
-              </router-link>
+              <span>{{ scope.row.title }}</span>
             </template>
           </el-table-column>
           <el-table-column min-width="150px" label="图片">
@@ -141,6 +171,7 @@ export default {
   data() {
     return {
       postForm: Object.assign({}, defaultForm),
+      messageArray: [],
       oa_wechat_id: undefined,
       loading: false,
       rules: {
@@ -194,17 +225,23 @@ export default {
     }
   },
   methods: {
+    handleDelete(row) {
+      const index = this.messageArray.indexOf(row)
+      this.messageArray.splice(index, 1)
+    },
     handleSelectionChange(val) {
       this.drapList.multipleSelection = val
+      this.$nextTick(this.checked())
     },
-    handleDownload() {
+    handleSave() {
       if (this.drapList.multipleSelection.length) {
         // 撤销所有选择
         // this.$refs.multipleTable.clearSelection()
-        console.log(this.drapList.multipleSelection)
+        this.messageArray = this.drapList.multipleSelection
+        this.dialogTableVisible = false
       } else {
         this.$message({
-          message: 'Please select at least one item',
+          message: '请选择数据',
           type: 'warning'
         })
       }
@@ -218,6 +255,17 @@ export default {
       }
       this.createDragDataByMessageType()
       this.dialogTableVisible = true
+    },
+    checked() {
+      if (this.messageArray.length) {
+        this.drapList.list.forEach(row => {
+          this.messageArray.forEach(row1 => {
+            if (row.id === row1.id) {
+              this.$refs.multipleTable.toggleRowSelection(row, true)
+            }
+          }, row)
+        }, this)
+      }
     },
     createDragDataByMessageType() {
       this.drapList.listLoading = true
@@ -254,10 +302,6 @@ export default {
       this.drapList.listQuery.offset = (val - 1) * this.drapList.listQuery.limit
       this.createDragDataByMessageType()
     },
-    // v-el-drag-dialog onDrag callback function
-    handleDrag() {
-      this.$refs.select.blur()
-    },
     fetchData(id) {
       fetchMessage(id).then(response => {
         this.postForm = response.data.data
@@ -272,6 +316,10 @@ export default {
           if (this.oa_wechat_id === undefined || isNaN(this.oa_wechat_id)) {
             return this.$message.error('请选择公众号')
           }
+          if (this.messageArray.length <= 0) {
+            return this.$message.error('请添加消息')
+          }
+          this.postForm.messageArray = this.messageArray
           if (!this.isEdit) {
             createMessage(this.postForm).then((response) => {
               console.log(valid)
@@ -284,7 +332,7 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-              this.$router.push('/message/message-list')
+              // this.$router.push('/message/message-list')
             })
           } else {
             updateMessage(this.postForm).then((response) => {
