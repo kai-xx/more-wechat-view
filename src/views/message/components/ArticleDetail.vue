@@ -27,8 +27,8 @@
           <el-input type="textarea" class="article-textarea" :rows="1" placeholder="请输入内容" v-model="postForm.remark">
           </el-input>
         </el-form-item>
-        <el-form-item style="margin-bottom: 40px;" label-width="100px" prop="messageType"  label="消息类型">
-          <el-select v-model="postForm.messageType" placeholder="请选择消息类型">
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" prop="message_type"  label="消息类型">
+          <el-select v-model="postForm.message_type" placeholder="请选择消息类型">
             <el-option v-for="item in  messageTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
               {{ item.display_name }}
             </el-option>
@@ -172,7 +172,6 @@ export default {
     return {
       postForm: Object.assign({}, defaultForm),
       messageArray: [],
-      oa_wechat_id: undefined,
       loading: false,
       rules: {
         title: [
@@ -181,7 +180,7 @@ export default {
         type: [
           { required: true, message: '请选择发送类型', trigger: 'change' }
         ],
-        messageType: [
+        message_type: [
           { required: true, message: '请选择消息类型', trigger: 'change' }
         ],
         send_at: [
@@ -197,7 +196,6 @@ export default {
         total: 0,
         listLoading: false,
         listQuery: {
-          oa_wechat_id: undefined,
           state: 1,
           offset: 0,
           limit: 2000
@@ -220,7 +218,6 @@ export default {
       this.fetchData(id)
     } else {
       this.postForm = Object.assign({}, defaultForm)
-      this.oa_wechat_id = this.$route.params && this.$route.params.oa_wechat_id
       this.postForm.oa_wechat_id = this.$route.params && this.$route.params.oa_wechat_id
     }
   },
@@ -234,7 +231,23 @@ export default {
       this.$nextTick(this.checked())
     },
     handleSave() {
-      if (this.drapList.multipleSelection.length) {
+      var messageLength = this.drapList.multipleSelection.length
+      if (messageLength) {
+        if (this.postForm.message_type === '3') {
+          if (messageLength > 6) {
+            return this.$message({
+              message: '图文消息最多只能有6条',
+              type: 'warning'
+            })
+          }
+        } else {
+          if (messageLength > 1) {
+            return this.$message({
+              message: '非图文消息最多只能有1条',
+              type: 'warning'
+            })
+          }
+        }
         // 撤销所有选择
         // this.$refs.multipleTable.clearSelection()
         this.messageArray = this.drapList.multipleSelection
@@ -250,7 +263,7 @@ export default {
       return jsonData.map(v => filterVal.map(j => v[j]))
     },
     openDialog() {
-      if (this.postForm.messageType === undefined) {
+      if (this.postForm.message_type === undefined) {
         return this.$message.error('请选择消息类型')
       }
       this.createDragDataByMessageType()
@@ -269,13 +282,13 @@ export default {
     },
     createDragDataByMessageType() {
       this.drapList.listLoading = true
-      switch (this.postForm.messageType) {
+      switch (this.postForm.message_type) {
         case '1':
           break
         case '2':
           break
         case '3':
-          console.log(this.postForm.messageType)
+          console.log(this.postForm.message_type)
           fetchListNews(this.drapList.listQuery).then(response => {
             this.drapList.list = response.data.data
             this.drapList.total = response.data.total
@@ -305,6 +318,8 @@ export default {
     fetchData(id) {
       fetchMessage(id).then(response => {
         this.postForm = response.data.data
+        this.messageArray = response.data.data.messageArray
+        this.message_type = response.data.data.message_type
       }).catch(err => {
         console.log(err)
       })
@@ -313,7 +328,7 @@ export default {
       this.postForm.display_time = parseInt(this.display_time / 1000)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          if (this.oa_wechat_id === undefined || isNaN(this.oa_wechat_id)) {
+          if (this.postForm.oa_wechat_id === undefined || isNaN(this.postForm.oa_wechat_id)) {
             return this.$message.error('请选择公众号')
           }
           if (this.messageArray.length <= 0) {
@@ -332,7 +347,7 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-              // this.$router.push('/message/message-list')
+              this.$router.push('/message/message-list')
             })
           } else {
             updateMessage(this.postForm).then((response) => {

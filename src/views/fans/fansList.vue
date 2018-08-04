@@ -6,10 +6,15 @@
     <el-main style="border: 1px solid #eee">
       <div class="app-container">
         <div class="filter-container">
-          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="标题" v-model="listQuery.keyword">
+          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="昵称" v-model="listQuery.keyword">
           </el-input>
+          <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" placeholder="状态">
+            <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
+            </el-option>
+          </el-select>
           <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button class="filter-item" @click="jumpToCreate" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
+          <el-button class="filter-item" type="primary" v-waves icon="el-icon-edit" @click="commonUpdate">更新</el-button>
+          <el-button class="filter-item" type="danger" v-waves icon="el-icon-edit" @click="forceUpdate">强制更新</el-button>
         </div>
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
           <el-table-column align="center" label="编号" width="80">
@@ -19,17 +24,19 @@
           </el-table-column>
 
 
-          <el-table-column min-width="300px" label="标题">
+          <el-table-column min-width="100px" label="昵称">
             <template slot-scope="scope">
-              <router-link class="link-type" :to="'/message/edit/'+scope.row.id">
-                <span>{{ scope.row.title }}</span>
-              </router-link>
+                <span>{{ scope.row.nike }}</span>
             </template>
           </el-table-column>
-
-          <el-table-column class-name="status-col" label="类型" width="100">
+          <el-table-column min-width="150px" label="头像">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.message_type | messageTypeFilter" >{{ scope.row.message_type | messageTypeFilter}}</el-tag>
+              <img :src="scope.row.head_img+'?imageView2/1/w/25/h/25'">
+            </template>
+          </el-table-column>
+          <el-table-column min-width="150px" label="关注时间">
+            <template slot-scope="scope">
+              <span>{{scope.row.subscribe_time}}</span>
             </template>
           </el-table-column>
 
@@ -39,17 +46,6 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="center" label="操作" width="230">
-            <template slot-scope="scope">
-              <el-button size="small" type="success" icon="el-icon-upload2" @click="">发送
-              </el-button>
-              <router-link :to="'/message/edit/'+scope.row.id">
-                <el-button type="primary" size="small">编辑</el-button>
-              </router-link>
-              <el-button v-if="scope.row.deleted_at==null" size="small" type="danger" @click="handleDelete(scope.row,'deleted')">删除
-              </el-button>
-            </template>
-          </el-table-column>
         </el-table>
 
         <div class="pagination-container">
@@ -64,32 +60,26 @@
 </template>
 
 <script>
-import { fetchList, deleteMessage } from '@/api/message'
+import { fetchList, updateFans } from '@/api/fans'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
 
-const messageTypeOptions = [
-  { key: '1', display_name: '文本' },
-  { key: '2', display_name: '图片' },
-  { key: '3', display_name: '图文' },
-  { key: '4', display_name: '链接' },
-  { key: '5', display_name: '视频' },
-  { key: '6', display_name: '音频' }
-]
-const messageTypeKeyValue = messageTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+const stateKeyValue = {
+  1: '正常',
+  2: '冻结'
+}
 export default {
-  name: 'messageList',
+  name: 'fansList',
   components: { LeftList },
   directives: {
     waves
   },
   data() {
     return {
+      update: {},
       list: null,
       total: 0,
+      updateLoading: false,
       listLoading: true,
       listQuery: {
         oa_wechat_id: undefined,
@@ -97,23 +87,46 @@ export default {
         offset: 0,
         limit: 20
       },
-      messageTypeOptions
+      stateKeyValue
     }
   },
   filters: {
-    messageTypeFilter(type) {
-      return messageTypeKeyValue[type]
+    statusFilter(status) {
+      const statusMap = {
+        1: 'success',
+        2: 'danger'
+      }
+      return statusMap[status]
+    },
+    stateFilter(state) {
+      return stateKeyValue[state]
     }
   },
   created() {
     this.getList()
   },
   methods: {
-    jumpToCreate() {
+    forceUpdate() {
+      this.updateLoading = true
+      this.update.oa_wechat_id = this.listQuery.oa_wechat_id
+      this.update.force = 1
+      this.updateFans()
+    },
+    commonUpdate() {
+      this.updateLoading = true
+      this.update.oa_wechat_id = this.listQuery.oa_wechat_id
+      this.update.force = 0
+      this.updateFans()
+    },
+    updateFans() {
       if (this.listQuery.oa_wechat_id === undefined) {
         return this.$message.error('请选择公众号')
       }
-      this.$router.push('/message/create/' + this.listQuery.oa_wechat_id)
+      updateFans(this.update).then(response => {
+        this.updaeResult = response.data
+        this.updateLoading = false
+        this.handleFilter()
+      })
     },
     getList() {
       this.listLoading = true
@@ -134,22 +147,18 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * this.listQuery.limit
       this.getList()
-    },
-    handleDelete(row) {
-      deleteMessage(row.id).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '删除成功',
-          type: 'success',
-          duration: 2000
-        })
-        const index = this.list.indexOf(row)
-        this.list.splice(index, 1)
-      })
     }
   }
 }
 </script>
 
 <style scoped>
+.edit-input {
+  padding-right: 100px;
+}
+.cancel-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
 </style>

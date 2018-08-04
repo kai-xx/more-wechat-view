@@ -70,6 +70,16 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/fans',
+    component: Layout,
+    redirect: '/fans/fans-list',
+    alwaysShow: true,
+    meta: { title: '粉丝', icon: 'peoples' },
+    children: [
+      { path: 'fans-list', component: () => import('@/views/fans/fansList'), name: 'fansList', meta: { title: '粉丝列表' }}
+    ]
+  },
+  {
     path: '/message',
     component: Layout,
     redirect: '/message/message-list',
