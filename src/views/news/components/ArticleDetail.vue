@@ -38,7 +38,7 @@
 
 <script>
 import MDinput from '@/components/MDinput'
-import Upload from '@/components/Upload/singleImage'
+import Upload from '@/components/MyUpload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { createNews, updateNews, fetchNews } from '@/api/news'
 
