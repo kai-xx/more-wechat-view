@@ -29,9 +29,30 @@
                 <span>{{ scope.row.nike }}</span>
             </template>
           </el-table-column>
+          <el-table-column min-width="50px" label="性别">
+            <template slot-scope="scope">
+              <span v-if="scope.row.sex == 2">女</span>
+              <span v-else="scope.row.sex == 1">男</span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="50px" label="国家">
+            <template slot-scope="scope">
+              <span>{{ scope.row.country }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="50px" label="省份">
+            <template slot-scope="scope">
+              <span>{{ scope.row.province }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="50px" label="城市">
+            <template slot-scope="scope">
+              <span>{{ scope.row.city }}</span>
+            </template>
+          </el-table-column>
           <el-table-column min-width="150px" label="头像">
             <template slot-scope="scope">
-              <img :src="scope.row.head_img+'?imageView2/1/w/25/h/25'">
+              <img :src="scope.row.head_img+'?imageView2/1/w/50/h/50'">
             </template>
           </el-table-column>
           <el-table-column min-width="150px" label="关注时间">
