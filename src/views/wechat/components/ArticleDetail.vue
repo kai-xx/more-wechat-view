@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import Upload from '@/components/Upload/singleImage'
+import Upload from '@/components/MyUpload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { createWechat, updateWechat, fetchWechat } from '@/api/wechat'
 const typeOptions = [
@@ -83,7 +83,7 @@ const defaultForm = {
   app_id: '',
   app_secret: '',
   type: undefined,
-  image: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+  image: '',
   state: '',
   remark: ''
 }
@@ -106,7 +106,7 @@ export default {
           { required: true, message: '请输入公众号名称', trigger: 'blur' }
         ],
         app_id: [
-          { required: true, message: '请输入app_id', trigger: 'blur' },
+          { required: true, message: '请输入app_id', trigger: 'blur' }
         ],
         app_secret: [
           { required: true, message: '请输入app_secret', trigger: 'blur' },
