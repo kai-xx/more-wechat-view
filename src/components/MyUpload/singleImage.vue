@@ -1,7 +1,13 @@
 <template>
     <div class="upload-container">
-        <el-upload class="image-uploader" :data="dataObj" drag :multiple="false" :show-file-list="false" action="http://more-wechat.com/api/v1/upload"
-            :on-success="handleImageScucess">
+        <el-upload class="image-uploader"
+                   :data="dataObj"
+                   drag :multiple="false"
+                   :show-file-list="false"
+                   action="http://more-wechat.com/api/v1/upload"
+                   :on-success="handleImageSuccess"
+                   :before-upload="beforeUpload"
+        >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         </el-upload>
@@ -41,21 +47,26 @@ export default {
     emitInput(val) {
       this.$emit('input', val)
     },
-    handleImageScucess() {
+    handleImageSuccess(res, file) {
+      this.tempUrl = res.data.tmpPath
       this.emitInput(this.tempUrl)
+    },
+    beforeUpload(file) {
+      var checkType = true
+      if (file.type !== 'image/jpeg' &&
+          file.type !== 'image/jpg' &&
+          file.type !== 'image/png' &&
+          file.type !== 'image/gif'
+      ) {
+        checkType = false
+        this.$message.error('上传头像图片只能是 JPG,JPEG,PNG,GIF 格式!')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return checkType && isLt2M
     }
-  },
-  beforeUpload(file) {
-    console.log(file)
-    const isJPG = file.type === 'image/jpeg'
-    const isLt2M = file.size / 1024 / 1024 < 2
-    if (!isJPG) {
-      this.$message.error('上传头像图片只能是 JPG 格式!')
-    }
-    if (!isLt2M) {
-      this.$message.error('上传头像图片大小不能超过 2MB!')
-    }
-    return isJPG && isLt2M
   }
 }
 </script>

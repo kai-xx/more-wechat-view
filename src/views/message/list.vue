@@ -31,9 +31,9 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column min-width="150px" label="图片">
+          <el-table-column mix-width="50px"  label="图片">
             <template slot-scope="scope">
-              <img :src="scope.row.path+'?imageView2/1/w/50/h/50'">
+              <img style="height: 40px" :src="scope.row.path">
             </template>
           </el-table-column>
           <el-table-column class-name="status-col" label="状态" width="100">
