@@ -29,10 +29,14 @@
 
           <el-table-column class-name="status-col" label="类型" width="100">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.message_type | messageTypeFilter" >{{ scope.row.message_type | messageTypeFilter}}</el-tag>
+              <el-tag >{{ scope.row.type | messageTypeFilter}}</el-tag>
             </template>
           </el-table-column>
-
+          <el-table-column width="180px" align="创建时间" label="发送时间">
+            <template slot-scope="scope">
+              <span>{{scope.row.send_at | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+            </template>
+          </el-table-column>
           <el-table-column width="180px" align="创建时间" label="创建时间">
             <template slot-scope="scope">
               <span>{{scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
