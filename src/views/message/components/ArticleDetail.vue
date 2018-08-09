@@ -134,12 +134,12 @@ const stateKeyValue = {
   2: '冻结'
 }
 const messageTypeOptions = [
-  { key: '1', display_name: '文本' },
-  { key: '2', display_name: '图片' },
-  { key: '3', display_name: '图文' },
-  { key: '4', display_name: '链接' },
-  { key: '5', display_name: '视频' },
-  { key: '6', display_name: '音频' }
+  { key: 1, display_name: '文本' },
+  { key: 2, display_name: '图片' },
+  { key: 3, display_name: '图文' },
+  { key: 4, display_name: '链接' },
+  { key: 5, display_name: '视频' },
+  { key: 6, display_name: '音频' }
 ]
 const typeKeyValue = typeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name

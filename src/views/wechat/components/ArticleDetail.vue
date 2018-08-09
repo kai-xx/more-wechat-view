@@ -11,7 +11,7 @@
         <el-form-item style="margin-bottom: 40px;" label-width="100px" prop="type"  label="类型">
           <el-select v-model="postForm.type" placeholder="请选择类型">
             <el-option v-for="item in  typeOptions" :key="item.key" :label="item.display_name" :value="item.key">
-              {{ item.display_name }}
+              <!--{{ item.display_name }}-->
             </el-option>
           </el-select>
         </el-form-item>
@@ -65,8 +65,8 @@ import Upload from '@/components/MyUpload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { createWechat, updateWechat, fetchWechat } from '@/api/wechat'
 const typeOptions = [
-  { key: '1', display_name: '服务号' },
-  { key: '2', display_name: '订阅号' }
+  { key: 1, display_name: '服务号' },
+  { key: 2, display_name: '订阅号' }
 ]
 const typeKeyValue = typeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -120,7 +120,7 @@ export default {
     }
   },
   filters: {
-    typeFilter(type) {
+    typeFilter1111(type) {
       return typeKeyValue[type]
     }
   },

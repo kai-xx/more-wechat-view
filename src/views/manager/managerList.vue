@@ -123,9 +123,9 @@ const stateKeyValue = {
   2: '冻结'
 }
 const managerTypeOptions = [
-  { key: '1', display_name: '管理员' },
-  { key: '2', display_name: '公众号管理员' },
-  { key: '3', display_name: '运营者' }
+  { key: 1, display_name: '管理员' },
+  { key: 2, display_name: '公众号管理员' },
+  { key: 3, display_name: '运营者' }
 ]
 // arr to obj ,such as { CN : "China", US : "USA" }
 const managerTypeKeyValue = managerTypeOptions.reduce((acc, cur) => {
