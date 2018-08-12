@@ -12,6 +12,11 @@
             <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
             </el-option>
           </el-select>
+          <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.type" placeholder="消息类型">
+            <el-option v-for="item in  messageTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
+              {{ item.display_name }}
+            </el-option>
+          </el-select>
           <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
           <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button @click="jumpToCreate" class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
@@ -34,6 +39,11 @@
           <el-table-column mix-width="50px"  label="图片">
             <template slot-scope="scope">
               <img style="height: 40px" :src="scope.row.path">
+            </template>
+          </el-table-column>
+          <el-table-column class-name="status-col" label="类型" width="100">
+            <template slot-scope="scope">
+              <span>{{ scope.row.type | messageTypeFilter}}</span>
             </template>
           </el-table-column>
           <el-table-column class-name="status-col" label="状态" width="100">
@@ -80,6 +90,19 @@ const stateKeyValue = {
   1: '正常',
   2: '冻结'
 }
+
+const messageTypeOptions = [
+  { key: 1, display_name: '文本' },
+  { key: 2, display_name: '图片' },
+  { key: 3, display_name: '图文' },
+  { key: 4, display_name: '链接' }
+  // { key: 5, display_name: '视频' },
+  // { key: 6, display_name: '音频' }
+]
+const messageTypeKeyValue = messageTypeOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
 export default {
   name: 'newsList',
   components: { LeftList },
@@ -93,11 +116,13 @@ export default {
       listLoading: true,
       listQuery: {
         oa_wechat_id: undefined,
+        type: undefined,
         state: undefined,
         offset: 0,
         limit: 20
       },
-      stateKeyValue
+      stateKeyValue,
+      messageTypeOptions
     }
   },
   filters: {
@@ -110,6 +135,9 @@ export default {
     },
     stateFilter(state) {
       return stateKeyValue[state]
+    },
+    messageTypeFilter(type) {
+      return messageTypeKeyValue[type]
     }
   },
   created() {

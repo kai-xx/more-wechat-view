@@ -14,7 +14,13 @@ export function fetchMessage(id) {
     method: 'get'
   })
 }
-
+export function sendMessage(data) {
+  return request({
+    url: '/api/wechatApi/sendMessage',
+    method: 'post',
+    data
+  })
+}
 export function createMessage(data) {
   return request({
     url: '/api/message/store',
@@ -37,3 +43,4 @@ export function deleteMessage(id) {
     method: 'delete'
   })
 }
+

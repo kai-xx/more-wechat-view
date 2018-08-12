@@ -6,7 +6,7 @@
     <el-main style="border: 1px solid #eee">
       <div class="app-container">
         <div class="filter-container">
-          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="昵称" v-model="listQuery.keyword">
+          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="标签名称" v-model="listQuery.keyword">
           </el-input>
           <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" placeholder="状态">
             <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
@@ -22,42 +22,15 @@
               <span>{{scope.row.id}}</span>
             </template>
           </el-table-column>
+          <el-table-column min-width="100px" label="标签ID">
+            <template slot-scope="scope">
+              <span>{{ scope.row.tag_id }}</span>
+            </template>
+          </el-table-column>
 
-
-          <el-table-column min-width="100px" label="昵称">
+          <el-table-column min-width="100px" label="标签名称">
             <template slot-scope="scope">
-                <span>{{ scope.row.nike }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="50px" label="性别">
-            <template slot-scope="scope">
-              <span v-if="scope.row.sex == 2">女</span>
-              <span v-else="scope.row.sex == 1">男</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="50px" label="国家">
-            <template slot-scope="scope">
-              <span>{{ scope.row.country }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="50px" label="省份">
-            <template slot-scope="scope">
-              <span>{{ scope.row.province }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="50px" label="城市">
-            <template slot-scope="scope">
-              <span>{{ scope.row.city }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column min-width="150px" label="头像">
-            <template slot-scope="scope">
-              <img :src="scope.row.head_img+'?imageView2/1/w/50/h/50'">
-            </template>
-          </el-table-column>
-          <el-table-column min-width="150px" label="关注时间">
-            <template slot-scope="scope">
-              <span>{{scope.row.subscribe_time}}</span>
+                <span>{{ scope.row.tag_name }}</span>
             </template>
           </el-table-column>
 
@@ -81,7 +54,7 @@
 </template>
 
 <script>
-import { fetchList, updateFans } from '@/api/fans'
+import { tagList, updateTags } from '@/api/fans'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
 
@@ -90,7 +63,7 @@ const stateKeyValue = {
   2: '冻结'
 }
 export default {
-  name: 'fansList',
+  name: 'tagsList',
   components: { LeftList },
   directives: {
     waves
@@ -131,19 +104,19 @@ export default {
       this.updateLoading = true
       this.update.oa_wechat_id = this.listQuery.oa_wechat_id
       this.update.force = 1
-      this.updateFans()
+      this.updateTags()
     },
     commonUpdate() {
       this.updateLoading = true
       this.update.oa_wechat_id = this.listQuery.oa_wechat_id
       this.update.force = 0
-      this.updateFans()
+      this.updateTags()
     },
-    updateFans() {
+    updateTags() {
       if (this.listQuery.oa_wechat_id === undefined) {
         return this.$message.error('请选择公众号')
       }
-      updateFans(this.update).then(response => {
+      updateTags(this.update).then(response => {
         this.updateResult = response.data
         this.updateLoading = false
         this.handleFilter()
@@ -151,7 +124,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      tagList(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.total
         this.listLoading = false

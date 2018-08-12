@@ -76,7 +76,8 @@ export const asyncRouterMap = [
     alwaysShow: true,
     meta: { title: '粉丝', icon: 'peoples' },
     children: [
-      { path: 'fans-list', component: () => import('@/views/fans/fansList'), name: 'fansList', meta: { title: '粉丝列表' }}
+      { path: 'fans-list', component: () => import('@/views/fans/fansList'), name: 'fansList', meta: { title: '粉丝列表' }},
+      { path: 'tags-list', component: () => import('@/views/fans/tagsList'), name: 'tagsList', meta: { title: '标签列表' }}
     ]
   },
   {
@@ -96,11 +97,11 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/news/news-list',
     alwaysShow: true,
-    meta: { title: '图文', icon: 'excel' },
+    meta: { title: '资源', icon: 'excel' },
     children: [
-      { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '图文列表' }},
-      { path: 'create/:oa_wechat_id', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建图文' }, hidden: true },
-      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑图文' }, hidden: true }
+      { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '资源列表' }},
+      { path: 'create/:oa_wechat_id', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建资源' }, hidden: true },
+      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

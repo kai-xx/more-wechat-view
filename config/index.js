@@ -6,7 +6,6 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -74,7 +73,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: '/more-wechat-view/', // If you are deployed on the root path, please use '/'
+    assetsPublicPath: '/', // If you are deployed on the root path, please use '/'
 
     /**
      * Source Maps

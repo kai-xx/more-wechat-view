@@ -19,6 +19,13 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item style="margin-bottom: 40px;" label-width="100px" prop="checkedTags"  label="发送人群">
+          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group v-model="checkedTags" @change="handleCheckedTagsChange">
+            <el-checkbox v-for="tag in tagsList" :label="tag.tag_id" :key="tag.tag_id" :value="tag.tag_id">{{tag.tag_name}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
         <el-form-item v-if="postForm.type == 2" prop="send_at" label-width="100px" label="发送时间:" class="postInfo-container-item">
           <el-date-picker v-model="postForm.send_at" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"> placeholder="选择日期时间">
           </el-date-picker>
@@ -50,9 +57,9 @@
               <span>{{ scope.row.title }}</span>
             </template>
           </el-table-column>
-          <el-table-column min-width="150px" label="图片">
+          <el-table-column min-width="50px" label="图片">
             <template slot-scope="scope">
-              <img :src="scope.row.path+'?imageView2/1/w/50/h/50'">
+              <img style="height: 40px" :src="scope.row.path">
             </template>
           </el-table-column>
           <el-table-column width="180px" align="创建时间" label="创建时间">
@@ -96,9 +103,9 @@
               <span>{{ scope.row.title }}</span>
             </template>
           </el-table-column>
-          <el-table-column min-width="150px" label="图片">
+          <el-table-column min-width="50px" label="图片">
             <template slot-scope="scope">
-              <img :src="scope.row.path+'?imageView2/1/w/50/h/50'">
+              <img style="height: 40px" :src="scope.row.path">
             </template>
           </el-table-column>
           <el-table-column width="180px" align="创建时间" label="创建时间">
@@ -125,9 +132,11 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import waves from '@/directive/waves'
 import { createMessage, updateMessage, fetchMessage } from '@/api/message'
 import { fetchList as fetchListNews } from '@/api/news'
+import { tagList } from '@/api/fans'
+
 const typeOptions = [
-  { key: '1', display_name: '普通信息' },
-  { key: '2', display_name: '定时信息' }
+  { key: 1, display_name: '普通信息' },
+  { key: 2, display_name: '定时信息' }
 ]
 const stateKeyValue = {
   1: '正常',
@@ -137,9 +146,9 @@ const messageTypeOptions = [
   { key: 1, display_name: '文本' },
   { key: 2, display_name: '图片' },
   { key: 3, display_name: '图文' },
-  { key: 4, display_name: '链接' },
-  { key: 5, display_name: '视频' },
-  { key: 6, display_name: '音频' }
+  { key: 4, display_name: '链接' }
+  // { key: 5, display_name: '视频' },
+  // { key: 6, display_name: '音频' }
 ]
 const typeKeyValue = typeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -157,7 +166,6 @@ const defaultForm = {
   send_at: undefined,
   remark: ''
 }
-
 export default {
   name: 'articleDetail',
   directives: { elDragDialog, waves },
@@ -170,6 +178,18 @@ export default {
   },
   data() {
     return {
+      checkAll: false,
+      checkedTags: [],
+      isIndeterminate: true,
+      tagQuery: {
+        message_id: undefined,
+        oa_wechat_id: undefined,
+        state: 1,
+        offset: 0,
+        limit: 2000
+      },
+      tagsList: {},
+      tagOptions: [],
       postForm: Object.assign({}, defaultForm),
       messageArray: [],
       loading: false,
@@ -196,6 +216,8 @@ export default {
         total: 0,
         listLoading: false,
         listQuery: {
+          oa_wechat_id: 0,
+          type: 0,
           state: 1,
           offset: 0,
           limit: 2000
@@ -215,13 +237,33 @@ export default {
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
+      this.tagQuery.message_id = id
       this.fetchData(id)
     } else {
       this.postForm = Object.assign({}, defaultForm)
       this.postForm.oa_wechat_id = this.$route.params && this.$route.params.oa_wechat_id
     }
+    this.getTags()
   },
   methods: {
+    getTags() {
+      this.tagQuery.oa_wechat_id = this.postForm.oa_wechat_id
+      tagList(this.tagQuery).then(response => {
+        this.tagsList = response.data.data
+        this.tagsList.forEach(row => {
+          this.tagOptions.push(row.tag_id)
+        }, this)
+      })
+    },
+    handleCheckAllChange(val) {
+      this.checkedTags = val ? this.tagOptions : []
+      this.isIndeterminate = false
+    },
+    handleCheckedTagsChange(value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.tagOptions.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tagOptions.length
+    },
     handleDelete(row) {
       const index = this.messageArray.indexOf(row)
       this.messageArray.splice(index, 1)
@@ -231,12 +273,13 @@ export default {
       this.$nextTick(this.checked())
     },
     handleSave() {
+      console.log(this.postForm)
       var messageLength = this.drapList.multipleSelection.length
       if (messageLength) {
-        if (this.postForm.message_type === '3') {
-          if (messageLength > 6) {
+        if (this.postForm.message_type === 3) {
+          if (messageLength > 8) {
             return this.$message({
-              message: '图文消息最多只能有6条',
+              message: '图文消息最多只能有8条',
               type: 'warning'
             })
           }
@@ -282,26 +325,13 @@ export default {
     },
     createDragDataByMessageType() {
       this.drapList.listLoading = true
-      switch (this.postForm.message_type) {
-        case '1':
-          break
-        case '2':
-          break
-        case '3':
-          console.log(this.postForm.message_type)
-          fetchListNews(this.drapList.listQuery).then(response => {
-            this.drapList.list = response.data.data
-            this.drapList.total = response.data.total
-            this.drapList.listLoading = false
-          })
-          break
-        case '4':
-          break
-        case '5':
-          break
-        case '6':
-          break
-      }
+      this.drapList.listQuery.oa_wechat_id = this.postForm.oa_wechat_id
+      this.drapList.listQuery.type = this.postForm.message_type
+      fetchListNews(this.drapList.listQuery).then(response => {
+        this.drapList.list = response.data.data
+        this.drapList.total = response.data.total
+        this.drapList.listLoading = false
+      })
     },
     handleFilter() {
       this.drapList.listQuery.offset = 0
@@ -320,6 +350,7 @@ export default {
         this.postForm = response.data.data
         this.messageArray = response.data.data.messageArray
         this.message_type = response.data.data.message_type
+        this.checkedTags = response.data.data.tags
       }).catch(err => {
         console.log(err)
       })
@@ -331,10 +362,14 @@ export default {
           if (this.postForm.oa_wechat_id === undefined || isNaN(this.postForm.oa_wechat_id)) {
             return this.$message.error('请选择公众号')
           }
+          if (this.checkedTags.length <= 0) {
+            return this.$message.error('请选择发送人群')
+          }
           if (this.messageArray.length <= 0) {
             return this.$message.error('请添加消息')
           }
           this.postForm.messageArray = this.messageArray
+          this.postForm.tags = this.checkedTags
           if (!this.isEdit) {
             createMessage(this.postForm).then((response) => {
               console.log(valid)
