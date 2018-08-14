@@ -4,7 +4,7 @@
                    :data="dataObj"
                    drag :multiple="false"
                    :show-file-list="false"
-                   action="http://more-wechat.com/api/v1/upload"
+                   action="http://wechat.51outsource.top/api/upload"
                    :on-success="handleImageSuccess"
                    :before-upload="beforeUpload"
         >
