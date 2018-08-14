@@ -101,7 +101,8 @@ export const asyncRouterMap = [
     children: [
       { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '资源列表' }},
       { path: 'create/:oa_wechat_id', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建资源' }, hidden: true },
-      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true }
+      { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true },
+      { path: 'news-detail/:id', component: () => import('@/views/news/newsDetail'), hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

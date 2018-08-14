@@ -3,7 +3,7 @@
     <el-button icon='el-icon-upload' size="mini" :style="{background:color,borderColor:color}" @click=" dialogVisible=true" type="primary">上传图片
     </el-button>
     <el-dialog append-to-body :visible.sync="dialogVisible">
-      <el-upload class="editor-slide-upload" action="https://httpbin.org/post" :multiple="true" :file-list="fileList" :show-file-list="true"
+      <el-upload class="editor-slide-upload" :action="uri" :multiple="true" :file-list="fileList" :show-file-list="true"
         list-type="picture-card" :on-remove="handleRemove" :on-success="handleSuccess" :before-upload="beforeUpload">
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
@@ -15,7 +15,7 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
-
+import { getUploadsUri } from '@/api/env'
 export default {
   name: 'editorSlideUpload',
   props: {
@@ -26,10 +26,15 @@ export default {
   },
   data() {
     return {
+      uri: undefined,
       dialogVisible: false,
       listObj: {},
       fileList: []
     }
+  },
+  created() {
+    this.uri =
+      console.log(getUploadsUri())
   },
   methods: {
     checkAllSuccess() {
@@ -52,7 +57,7 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = response.data.tmpPath
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
