@@ -70,6 +70,7 @@ export default {
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
         height: this.height,
+        language: 'zh_CN',
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
@@ -149,7 +150,7 @@ export default {
     imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" style="max-width: 100%" src="${v.url}" >`)
       })
     }
   },

@@ -44,6 +44,9 @@
             4.data-miniprogram-appid对应的小程序必须与公众号有绑定关系。
           </p>
         </el-form-item>
+        <div>
+          <tinymce :height="300" v-model="postForm.content"></tinymce>
+        </div>
         <div v-if="isShowByUpload(postForm.type)" style="margin-bottom: 20px;">
           <Upload v-model="postForm.path" />
           <p style="color: red;text-align: center">{{ uploadHintMessage(postForm.type) }}</p>
@@ -59,6 +62,7 @@
 </template>
 
 <script>
+import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
 import Upload from '@/components/MyUpload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
@@ -87,7 +91,7 @@ const defaultForm = {
 
 export default {
   name: 'articleDetail',
-  components: { MDinput, Upload, Sticky },
+  components: { MDinput, Upload, Sticky, Tinymce },
   props: {
     isEdit: {
       type: Boolean,

@@ -11,7 +11,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <div class="editor-content" v-html="info.content"></div>
+        <div class="editor-content news-content" v-html="info.content"></div>
       </el-col>
     </el-row>
     <el-row>
@@ -72,11 +72,11 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  p {
-    width: 100%;
+  p,img {
+    max-width: 100%;
   }
-  img {
-    width: 100%;
+  .news-content p img {
+
   }
   .el-row {
     margin-bottom: 20px;
