@@ -15,7 +15,6 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
-import { getUploadsUri } from '@/api/env'
 export default {
   name: 'editorSlideUpload',
   props: {
@@ -26,15 +25,14 @@ export default {
   },
   data() {
     return {
-      uri: undefined,
+      uri: '',
       dialogVisible: false,
       listObj: {},
       fileList: []
     }
   },
   created() {
-    this.uri =
-      console.log(getUploadsUri())
+    this.uri = process.env.UPLOADS_URI
   },
   methods: {
     checkAllSuccess() {

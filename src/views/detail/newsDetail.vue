@@ -6,16 +6,12 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6">{{ info.wechat_name }}</el-col>
-      <el-col :span="6">{{ info.created_at | parseTime('{y}-{m}-{d}') }}</el-col>
+      <el-col :span="12" style="font-size: 9px;text-align: left">{{ info.wechat_name }}</el-col>
+      <el-col :span="12" style="font-size: 9px;text-align: right">{{ info.created_at | parseTime('{y}-{m}-{d}') }}</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <div >
-          <p>
-            {{ info.content }}
-          </p>
-        </div>
+        <div class="editor-content" v-html="info.content"></div>
       </el-col>
     </el-row>
     <el-row>

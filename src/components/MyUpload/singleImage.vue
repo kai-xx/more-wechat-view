@@ -4,7 +4,7 @@
                    :data="dataObj"
                    drag :multiple="false"
                    :show-file-list="false"
-                   action="http://wechat.51outsource.top/api/upload"
+                   :action="uri"
                    :on-success="handleImageSuccess"
                    :before-upload="beforeUpload"
         >
@@ -36,9 +36,13 @@ export default {
   },
   data() {
     return {
+      uri: '',
       tempUrl: '',
       dataObj: { }
     }
+  },
+  created() {
+    this.uri = process.env.UPLOADS_URI
   },
   methods: {
     rmImage() {

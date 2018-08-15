@@ -30,10 +30,16 @@ export function updateNews(data) {
     data
   })
 }
-
+export function showDetail(id) {
+  return request({
+    url: '/api/news/showDetail/' + id,
+    method: 'get'
+  })
+}
 export function deleteNews(id) {
   return request({
     url: '/api/news/delete/' + id,
     method: 'delete'
   })
 }
+
