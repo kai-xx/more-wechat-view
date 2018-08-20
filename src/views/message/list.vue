@@ -29,7 +29,7 @@
 
           <el-table-column class-name="status-col" label="类型" width="100">
             <template slot-scope="scope">
-              <el-tag >{{ scope.row.message_type | messageTypeFilter}}</el-tag>
+              <el-tag >{{ scope.row.type | messageTypeFilter}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column width="180px" align="发送时间" label="发送时间">
@@ -44,7 +44,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="center" label="操作" width="230">
+          <el-table-column align="center" label="操作" width="280">
             <template slot-scope="scope">
               <el-button size="small" type="success" icon="el-icon-upload2" @click="sendMessage(scope.row)">发送
               </el-button>
@@ -53,6 +53,9 @@
               </router-link>
               <el-button v-if="scope.row.deleted_at==null" size="small" type="danger" @click="handleDelete(scope.row,'deleted')">删除
               </el-button>
+              <router-link :to="'/message/send-log/'+scope.row.id">
+                <el-button type="primary" size="small">日志</el-button>
+              </router-link>
             </template>
           </el-table-column>
         </el-table>
@@ -76,10 +79,10 @@ import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
 
 const messageTypeOptions = [
-  { key: '1', display_name: '文本' },
-  { key: '2', display_name: '图片' },
-  { key: '3', display_name: '图文' },
-  { key: '4', display_name: '链接' }
+  { key: 1, display_name: '文本' },
+  { key: 2, display_name: '图片' },
+  { key: 3, display_name: '图文' },
+  { key: 4, display_name: '链接' }
   // { key: '5', display_name: '视频' },
   // { key: '6', display_name: '音频' }
 ]

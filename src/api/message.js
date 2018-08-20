@@ -36,7 +36,13 @@ export function updateMessage(data) {
     data
   })
 }
-
+export function sendLog(query) {
+  return request({
+    url: '/api/message/sendLog',
+    method: 'get',
+    params: query
+  })
+}
 export function deleteMessage(id) {
   return request({
     url: '/api/message/delete/' + id,

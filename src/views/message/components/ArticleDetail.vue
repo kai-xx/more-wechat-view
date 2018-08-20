@@ -35,7 +35,7 @@
           </el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 40px;" label-width="100px" prop="message_type"  label="消息类型">
-          <el-select v-model="postForm.message_type" placeholder="请选择消息类型">
+          <el-select v-model="postForm.type" placeholder="请选择消息类型">
             <el-option v-for="item in  messageTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
               {{ item.display_name }}
             </el-option>
@@ -260,7 +260,7 @@ export default {
       this.isIndeterminate = false
     },
     handleCheckedTagsChange(value) {
-      let checkedCount = value.length
+      const checkedCount = value.length
       this.checkAll = checkedCount === this.tagOptions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.tagOptions.length
     },

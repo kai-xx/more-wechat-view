@@ -89,6 +89,7 @@ export const asyncRouterMap = [
     meta: { title: '消息', icon: 'message' },
     children: [
       { path: 'message-list', component: () => import('@/views/message/list'), name: 'messageList', meta: { title: '消息列表' }},
+      { path: 'send-log/:message_id', component: () => import('@/views/message/sendLog'), name: 'sendLog', meta: { title: '日志' }, hidden: true },
       { path: 'create/:oa_wechat_id', component: () => import('@/views/message/create'), name: 'createMessage', meta: { title: '添加消息' }, hidden: true },
       { path: 'edit/:id', component: () => import('@/views/message/edit'), name: 'editMessage', meta: { title: '编辑消息' }, hidden: true }
     ]
@@ -103,7 +104,6 @@ export const asyncRouterMap = [
       { path: 'news-list', component: () => import('@/views/news/newsList'), name: 'newsList', meta: { title: '资源列表' }},
       { path: 'create/:oa_wechat_id', component: () => import('@/views/news/createNews'), name: 'createNews', meta: { title: '新建资源' }, hidden: true },
       { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true }
-      // { path: 'news-detail/:id', component: () => import('@/views/news/newsDetail'), hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
