@@ -91,7 +91,11 @@ export const asyncRouterMap = [
       { path: 'message-list', component: () => import('@/views/message/list'), name: 'messageList', meta: { title: '消息列表' }},
       { path: 'send-log/:message_id', component: () => import('@/views/message/sendLog'), name: 'sendLog', meta: { title: '日志' }, hidden: true },
       { path: 'create/:oa_wechat_id', component: () => import('@/views/message/create'), name: 'createMessage', meta: { title: '添加消息' }, hidden: true },
-      { path: 'edit/:id', component: () => import('@/views/message/edit'), name: 'editMessage', meta: { title: '编辑消息' }, hidden: true }
+      { path: 'edit/:id', component: () => import('@/views/message/edit'), name: 'editMessage', meta: { title: '编辑消息' }, hidden: true },
+      { path: 'industry/industry-list', component: () => import('@/views/industry/list'), name: 'industryList', meta: { title: '模版消息' }},
+      { path: 'industry/send-log/:industry_message_id', component: () => import('@/views/industry/sendLog'), name: 'industrySendLog', meta: { title: '日志' }, hidden: true },
+      { path: 'industry/create/:id/wechat_id/:wechat_id', component: () => import('@/views/industry/create'), name: 'createIndustryMessage', meta: { title: '添加消息' }, hidden: true },
+      { path: 'industry/edit/:id/wechat_id/:wechat_id', component: () => import('@/views/industry/edit'), name: 'editIndustryMessage', meta: { title: '编辑消息' }, hidden: true },
     ]
   },
   {

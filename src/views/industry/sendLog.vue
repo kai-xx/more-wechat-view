@@ -8,7 +8,7 @@
       </el-table-column>
 
 
-      <el-table-column class-name="status-col" label="粉丝编号" width="60">
+      <el-table-column class-name="status-col" label="粉丝编号"  width="60">
         <template slot-scope="scope">
           <span>{{ scope.row.fans_id }}</span>
         </template>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { sendLog } from '@/api/message'
+import { sendLog } from '@/api/industry'
 
 const logTypeOptions = [
   { key: 1, display_name: '成功' },
@@ -94,7 +94,7 @@ export default {
     }
   },
   created() {
-    this.listQuery.message_id = this.$route.params && this.$route.params.message_id
+    this.listQuery.message_id = this.$route.params && this.$route.params.industry_message_id
     this.getList()
   },
   methods: {
