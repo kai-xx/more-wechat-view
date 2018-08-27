@@ -9,7 +9,7 @@
       </el-select>
       <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
+      <el-button v-if="managerType !== 3" class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
@@ -117,16 +117,36 @@
 import { fetchList, createManager, updateManager, deleteManager } from '@/api/manager'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
+import { mapGetters } from 'vuex'
+import store from '@/store'
 
 const stateKeyValue = {
   1: '正常',
   2: '冻结'
 }
-const managerTypeOptions = [
-  { key: 1, display_name: '管理员' },
-  { key: 2, display_name: '公众号管理员' },
-  { key: 3, display_name: '运营者' }
-]
+const managerType = store.getters.type
+const managerTypeOptions = (
+  function() {
+    if (managerType === 1) {
+      return [
+        { key: 1, display_name: '管理员' },
+        { key: 2, display_name: '公众号管理员' },
+        { key: 3, display_name: '运营者' }
+      ]
+    }
+    if (managerType === 2) {
+      return [
+        { key: 2, display_name: '公众号管理员' },
+        { key: 3, display_name: '运营者' }
+      ]
+    }
+    if (managerType === 3) {
+      return [
+        { key: 3, display_name: '运营者' }
+      ]
+    }
+  }
+)()
 // arr to obj ,such as { CN : "China", US : "USA" }
 const managerTypeKeyValue = managerTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -155,6 +175,7 @@ export default {
       },
       stateKeyValue,
       managerTypeOptions,
+      managerType,
       temp: {
         id: undefined,
         state: undefined,
@@ -176,9 +197,18 @@ export default {
           { min: 6, max: 16, message: '长度在6-16个字符', trigger: 'blur' }
         ],
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }]
       }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'name',
+      'avatar',
+      'roles',
+      'type'
+    ])
   },
   filters: {
     statusFilter(status) {

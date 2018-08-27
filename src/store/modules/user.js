@@ -40,6 +40,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_TYPE: (state, type) => {
+      state.type = type
     }
   },
 
@@ -74,6 +77,7 @@ const user = {
           }
 
           commit('SET_NAME', data.name)
+          commit('SET_TYPE', data.type)
           commit('SET_AVATAR', data.head_img)
           commit('SET_INTRODUCTION', data.introduction)
           resolve(response)
