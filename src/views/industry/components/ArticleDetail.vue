@@ -115,23 +115,6 @@ const typeKeyValue = typeOptions.reduce((acc, cur) => {
   return acc
 }, {})
 
-const defaultForm = {
-  send_remark: {
-    value: '',
-    color: ''
-  },
-  first: {
-    value: '',
-    color: ''
-  },
-  keywords: [{
-    value: '',
-    color: ''
-  }],
-  type: 1,
-  send_at: undefined,
-  remark: ''
-}
 export default {
   name: 'articleDetail',
   directives: { waves },
@@ -155,7 +138,14 @@ export default {
       },
       tagsList: {},
       tagOptions: [],
-      postForm: Object.assign({}, defaultForm),
+      postForm: {
+        send_remark: {},
+        first: {},
+        keywords: [],
+        type: 1,
+        send_at: undefined,
+        remark: ''
+      },
       loading: false,
       rules: {
         type: [
@@ -178,7 +168,6 @@ export default {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
     } else {
-      this.postForm = Object.assign({}, defaultForm)
       this.postForm.oa_wechat_id = this.$route.params && this.$route.params.wechat_id
     }
     this.getTags()
@@ -226,6 +215,7 @@ export default {
     },
     submitForm() {
       this.postForm.display_time = parseInt(this.display_time / 1000)
+        return console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           if (this.postForm.oa_wechat_id === undefined || isNaN(this.postForm.oa_wechat_id)) {
