@@ -215,7 +215,6 @@ export default {
     },
     submitForm() {
       this.postForm.display_time = parseInt(this.display_time / 1000)
-        return console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           if (this.postForm.oa_wechat_id === undefined || isNaN(this.postForm.oa_wechat_id)) {
