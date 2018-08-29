@@ -139,9 +139,9 @@ export default {
       tagsList: {},
       tagOptions: [],
       postForm: {
-        send_remark: {},
-        first: {},
-        keywords: [],
+        send_remark: { },
+        first: { },
+        keywords: [{ }],
         type: 1,
         send_at: undefined,
         remark: ''
@@ -194,7 +194,9 @@ export default {
     fetchData(id) {
       fetchMessage(id).then(response => {
         this.postForm = response.data.data
-        this.messageArray = response.data.data.messageArray
+        this.postForm.first = response.data.data.first.length === 0 ? {} : response.data.data.first
+        this.postForm.send_remark = response.data.data.send_remark.length === 0 ? {} : response.data.data.send_remark
+        this.postForm.keywords[0] = response.data.data.keywords[0].length === 0 ? {} : response.data.data.keywords[0]
         this.message_type = response.data.data.message_type
         this.checkedTags = response.data.data.tags
       }).catch(err => {
@@ -211,9 +213,10 @@ export default {
       this.postForm.keywords.push({
         value: '',
         key: Date.now()
-      });
+      })
     },
     submitForm() {
+      const aaa = this.postForm
       this.postForm.display_time = parseInt(this.display_time / 1000)
       this.$refs.postForm.validate(valid => {
         if (valid) {
@@ -238,7 +241,7 @@ export default {
               this.$router.push('/message/industry/industry-list')
             })
           } else {
-            updateMessage(this.postForm).then((response) => {
+            updateMessage(aaa).then((response) => {
               this.loading = true
               this.$notify({
                 title: '成功',
