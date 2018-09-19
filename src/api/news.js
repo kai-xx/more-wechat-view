@@ -32,7 +32,7 @@ export function updateNews(data) {
 }
 export function showDetail(id) {
   return request({
-    url: '/api/news/showDetail/' + id,
+    url: '/api/showDetail/' + id,
     method: 'get'
   })
 }
