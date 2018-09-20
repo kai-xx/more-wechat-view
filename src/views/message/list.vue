@@ -67,16 +67,15 @@
         </div>
       </div>
     </el-main>
+    <mine-footer></mine-footer>
   </el-container>
-
-
-
 </template>
 
 <script>
 import { fetchList, deleteMessage, sendMessage as sendMessageByMessageId } from '@/api/message'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
+import mineFooter from '../footer/footer'
 
 const messageTypeOptions = [
   { key: 1, display_name: '文本' },
@@ -92,7 +91,7 @@ const messageTypeKeyValue = messageTypeOptions.reduce((acc, cur) => {
 }, {})
 export default {
   name: 'messageList',
-  components: { LeftList },
+  components: { LeftList, mineFooter },
   directives: {
     waves
   },

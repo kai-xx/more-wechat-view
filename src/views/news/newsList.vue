@@ -78,6 +78,7 @@
 
       </div>
     </el-main>
+    <mine-footer></mine-footer>
   </el-container>
 </template>
 
@@ -85,6 +86,7 @@
 import { fetchList, deleteNews } from '@/api/news'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
+import mineFooter from '../footer/footer'
 
 const stateKeyValue = {
   1: '正常',
@@ -105,7 +107,7 @@ const messageTypeKeyValue = messageTypeOptions.reduce((acc, cur) => {
 }, {})
 export default {
   name: 'newsList',
-  components: { LeftList },
+  components: { LeftList, mineFooter },
   directives: {
     waves
   },

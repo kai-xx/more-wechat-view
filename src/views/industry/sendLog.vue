@@ -47,12 +47,15 @@
                      :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+    <mine-footer></mine-footer>
+
   </div>
 
 </template>
 
 <script>
 import { sendLog } from '@/api/industry'
+import mineFooter from '../footer/footer'
 
 const logTypeOptions = [
   { key: 1, display_name: '成功' },
@@ -64,6 +67,7 @@ const logTypeKeyValue = logTypeOptions.reduce((acc, cur) => {
 }, {})
 export default {
   name: 'sendLog',
+  components: { mineFooter },
   data() {
     return {
       sendData: {

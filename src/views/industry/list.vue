@@ -73,20 +73,19 @@
         </div>
       </div>
     </el-main>
+    <mine-footer></mine-footer>
   </el-container>
-
-
-
 </template>
 
 <script>
 import { fetchList, updateIndustry, sendIndustryMessage } from '@/api/industry'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
+import mineFooter from '../footer/footer'
 
 export default {
   name: 'industryList',
-  components: { LeftList },
+  components: { LeftList, mineFooter },
   directives: {
     waves
   },

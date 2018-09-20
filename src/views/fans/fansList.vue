@@ -77,6 +77,7 @@
 
       </div>
     </el-main>
+    <mine-footer></mine-footer>
   </el-container>
 </template>
 
@@ -84,14 +85,14 @@
 import { fetchList, updateFans } from '@/api/fans'
 import waves from '@/directive/waves'
 import LeftList from '../wechat/leftList'
-
+import mineFooter from '../footer/footer'
 const stateKeyValue = {
   1: '正常',
   2: '冻结'
 }
 export default {
   name: 'fansList',
-  components: { LeftList },
+  components: { LeftList, mineFooter },
   directives: {
     waves
   },

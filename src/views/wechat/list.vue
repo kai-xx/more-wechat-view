@@ -66,18 +66,22 @@
         :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+    <mine-footer></mine-footer>
   </div>
 </template>
 
 <script>
 import { fetchList, deleteWechat } from '@/api/wechat'
 import waves from '@/directive/waves' // 水波纹指令
+import mineFooter from '../footer/footer'
+
 const stateKeyValue = {
   1: '正常',
   2: '冻结'
 }
 export default {
   name: 'wechatList',
+  components: { mineFooter },
   directives: {
     waves
   },

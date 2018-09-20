@@ -39,6 +39,7 @@
       <br/>
       <social-sign />
     </el-dialog>
+    <mine-footer></mine-footer>
 
   </div>
 </template>
@@ -47,9 +48,10 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+import mineFooter from '../footer/footer'
 
 export default {
-  components: { LangSelect, SocialSign },
+  components: { LangSelect, SocialSign, mineFooter },
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {

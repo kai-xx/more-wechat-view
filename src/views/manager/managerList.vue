@@ -107,9 +107,7 @@
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
-
-
-
+    <mine-footer></mine-footer>
   </div>
 </template>
 
@@ -119,6 +117,7 @@ import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
 import store from '@/store'
+import mineFooter from '../footer/footer'
 
 const stateKeyValue = {
   1: '正常',
@@ -155,6 +154,7 @@ const managerTypeKeyValue = managerTypeOptions.reduce((acc, cur) => {
 
 export default {
   name: 'managerList',
+  components: { mineFooter },
   directives: {
     waves
   },
