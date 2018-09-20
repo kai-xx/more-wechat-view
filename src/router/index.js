@@ -95,7 +95,7 @@ export const asyncRouterMap = [
       { path: 'industry/industry-list', component: () => import('@/views/industry/list'), name: 'industryList', meta: { title: '模版消息' }},
       { path: 'industry/send-log/:industry_message_id', component: () => import('@/views/industry/sendLog'), name: 'industrySendLog', meta: { title: '日志' }, hidden: true },
       { path: 'industry/create/:id/wechat_id/:wechat_id', component: () => import('@/views/industry/create'), name: 'createIndustryMessage', meta: { title: '添加消息' }, hidden: true },
-      { path: 'industry/edit/:id/wechat_id/:wechat_id', component: () => import('@/views/industry/edit'), name: 'editIndustryMessage', meta: { title: '编辑消息' }, hidden: true },
+      { path: 'industry/edit/:id/wechat_id/:wechat_id', component: () => import('@/views/industry/edit'), name: 'editIndustryMessage', meta: { title: '编辑消息' }, hidden: true }
     ]
   },
   {
@@ -110,15 +110,15 @@ export const asyncRouterMap = [
       { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true }
     ]
   },
-  {
-    path: '/menu',
-    component: Layout,
-    redirect: '/menu/index',
-    alwaysShow: true,
-    meta: { title: '微信菜单', icon: 'list' },
-    children: [
-      { path: 'index', component: () => import('@/views/menu/menu'), name: 'menu', meta: { title: '微信菜单' }}
-    ]
-  },
+  // {
+  //   path: '/menu',
+  //   component: Layout,
+  //   redirect: '/menu/index',
+  //   alwaysShow: true,
+  //   meta: { title: '微信菜单', icon: 'list' },
+  //   children: [
+  //     { path: 'index', component: () => import('@/views/menu/menu'), name: 'menu', meta: { title: '微信菜单' }}
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
