@@ -17,7 +17,6 @@ function hasPermission(roles, permissionRoles) {
 const whiteList = ['/login', '/authredirect']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
   NProgress.start() // start progress bar
   if (getToken()) { // determine if there has token
     /* has token*/
