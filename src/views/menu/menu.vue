@@ -6,20 +6,7 @@
     <el-main style="border: 1px solid #eee">
       <div class="app-container">
         <div class="filter-container">
-          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="标题" v-model="listQuery.keyword">
-          </el-input>
-          <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.state" placeholder="状态">
-            <el-option v-for="item,key in  stateKeyValue" :key="key" :label="item" :value="key">
-            </el-option>
-          </el-select>
-          <el-select @change='handleFilter' clearable class="filter-item" style="width: 130px" v-model="listQuery.type" placeholder="消息类型">
-            <el-option v-for="item in  messageTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
-              {{ item.display_name }}
-            </el-option>
-          </el-select>
-          <el-checkbox class="filter-item" style='margin-left:15px;margin-right: 15px' @change='handleFilter' v-model="listQuery.showDelete">显示删除信息</el-checkbox>
-          <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button @click="jumpToCreate" class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加</el-button>
+          <el-button @click="jumpToCreate" class="filter-item" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">添加一级菜单</el-button>
         </div>
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
           <el-table-column align="center" label="编号" width="80">
@@ -70,16 +57,10 @@
           </el-table-column>
         </el-table>
 
-        <div class="pagination-container">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page"
-                         :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-          </el-pagination>
-        </div>
-
       </div>
     </el-main>
+    <mine-footer></mine-footer>
   </el-container>
-  <mine-footer></mine-footer>
 </template>
 
 <script>
@@ -106,7 +87,7 @@ const messageTypeKeyValue = messageTypeOptions.reduce((acc, cur) => {
   return acc
 }, {})
 export default {
-  name: 'menu',
+  name: 'newsList',
   components: { LeftList, mineFooter },
   directives: {
     waves
@@ -153,7 +134,7 @@ export default {
       if (this.listQuery.oa_wechat_id === undefined) {
         return this.$message.error('请选择公众号')
       }
-      this.$router.push('/news/create/' + this.listQuery.oa_wechat_id)
+      this.$router.push('/menu/create/' + this.listQuery.oa_wechat_id)
     },
     getList() {
       this.listLoading = true

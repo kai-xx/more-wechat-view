@@ -30,12 +30,6 @@ export function updateMenu(data) {
     data
   })
 }
-export function showDetail(id) {
-  return request({
-    url: '/api/menu/showDetail/' + id,
-    method: 'get'
-  })
-}
 export function deleteMenu(id) {
   return request({
     url: '/api/menu/delete/' + id,

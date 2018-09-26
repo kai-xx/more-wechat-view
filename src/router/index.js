@@ -110,15 +110,17 @@ export const asyncRouterMap = [
       { path: 'edit/:id', component: () => import('@/views/news/editNews'), name: 'editNews', meta: { title: '编辑资源' }, hidden: true }
     ]
   },
-  // {
-  //   path: '/menu',
-  //   component: Layout,
-  //   redirect: '/menu/index',
-  //   alwaysShow: true,
-  //   meta: { title: '微信菜单', icon: 'list' },
-  //   children: [
-  //     { path: 'index', component: () => import('@/views/menu/menu'), name: 'menu', meta: { title: '微信菜单' }}
-  //   ]
-  // },
+  {
+    path: '/menu',
+    component: Layout,
+    redirect: '/menu/index',
+    alwaysShow: true,
+    meta: { title: '微信菜单', icon: 'list' },
+    children: [
+      { path: 'index', component: () => import('@/views/menu/menu'), name: 'menu', meta: { title: '微信菜单' }},
+      { path: 'create/:oa_wechat_id', component: () => import('@/views/menu/create'), name: 'createMenu', meta: { title: '新建菜单' }, hidden: true },
+      { path: 'edit/:id', component: () => import('@/views/menu/edit'), name: 'editMenu', meta: { title: '编辑菜单' }, hidden: true }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
