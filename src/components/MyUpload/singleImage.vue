@@ -52,7 +52,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res, file) {
-      this.tempUrl = res.data.tmpPath
+      this.tempUrl = res.data.data.tmpPath
       this.emitInput(this.tempUrl)
     },
     beforeUpload(file) {
