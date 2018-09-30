@@ -18,7 +18,7 @@
               {{ item.display_name }}
             </el-option>
           </el-select>
-          <el-button v-if="postForm.message_type !== 80" type="primary" @click="openDialog">点击添加菜单</el-button>
+          <el-button v-if="postForm.message_type !== 80" type="primary" @click="openDialog">点击添加资源</el-button>
         </el-form-item>
         <el-form-item v-if="postForm.message_type === 80"  style="margin-bottom: 40px;" label-width="100px"
                        prop="applet_uri"
@@ -134,7 +134,7 @@ import elDragDialog from '@/directive/el-dragDialog' // base on element-ui
 import Upload from '@/components/Upload/singleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import waves from '@/directive/waves'
-import { createMessage, updateMessage, fetchMessage } from '@/api/message'
+import { createMenu, updateMenu, fetchMenu } from '@/api/menu'
 import { fetchList as fetchListNews } from '@/api/news'
 
 const stateKeyValue = {
@@ -300,7 +300,7 @@ export default {
       this.createDragDataByMessageType()
     },
     fetchData(id) {
-      fetchMessage(id).then(response => {
+      fetchMenu(id).then(response => {
         this.postForm = response.data.data
         this.messageArray = response.data.data.messageArray
         this.message_type = response.data.data.message_type
@@ -320,7 +320,7 @@ export default {
           }
           this.postForm.messageArray = this.messageArray
           if (!this.isEdit) {
-            createMessage(this.postForm).then((response) => {
+            createMenu(this.postForm).then((response) => {
               console.log(valid)
               this.loading = true
               this.$notify({
@@ -331,10 +331,10 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-              this.$router.push('/message/message-list')
+              this.$router.push('/menu/index')
             })
           } else {
-            updateMessage(this.postForm).then((response) => {
+            updateMenu(this.postForm).then((response) => {
               this.loading = true
               this.$notify({
                 title: '成功',
@@ -344,7 +344,7 @@ export default {
               })
               this.postForm.status = 'published'
               this.loading = false
-              this.$router.push('/message/message-list')
+              this.$router.push('/menu/index')
             })
           }
         } else {
